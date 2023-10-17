@@ -33,7 +33,6 @@ data_test = datasets.CIFAR10(
 data_loader_train = torch.utils.data.DataLoader(dataset=data_train, batch_size=64)
 data_loader_test = torch.utils.data.DataLoader(dataset=data_test, batch_size=64)
 
-
 model = models.vgg16(pretrained=True).eval()
 
 flag = 1
