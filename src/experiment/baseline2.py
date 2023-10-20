@@ -2,7 +2,6 @@ import torch
 import random
 import numpy as np
 from rarity_score import *
-from cifar10_dataset import *
 from torchvision import datasets, transforms, models
 from tqdm import tqdm
 
@@ -13,21 +12,27 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)
 
 
-data = datasets.CIFAR10(
+transform = transforms.Compose([
+    transforms.ToTensor(), transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
+
+data_train = datasets.CIFAR10(
         root="./data/",
+        transform=transform,
         train=True,
         download=True
 )
 
-data_train = CIFAR10Dataset(data, partition=range(1,10))
-data_test = CIFAR10Dataset(data, partition=[10])
-
-# sanity check to verify
-print(len(data_train))
-print(len(data_test))
+data_test = datasets.CIFAR10(
+        root="./data/",
+        transform=transform,
+        train=False,
+        download=True
+)
 
 data_loader_train = torch.utils.data.DataLoader(dataset=data_train, batch_size=64)
 data_loader_test = torch.utils.data.DataLoader(dataset=data_test, batch_size=64)
+
 
 model = models.vgg16(pretrained=True).eval()
 
@@ -62,3 +67,4 @@ real_features, fake_features = real_features.squeeze().numpy(), fake_features.sq
 manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
 print(score[score_index])
+np.savetxt('baseline.txt', score)
