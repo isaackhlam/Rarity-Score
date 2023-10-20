@@ -19,8 +19,8 @@ data = datasets.CIFAR10(
         download=True
 )
 
-data_train = CIFAR10Dataset(data, partition=range(1,10))
-data_test = CIFAR10Dataset(data, partition=[10])
+data_train = CIFAR10Dataset(data, partition=range(0,9))
+data_test = CIFAR10Dataset(data, partition=[9])
 
 # sanity check to verify
 print(len(data_train))
@@ -62,3 +62,4 @@ real_features, fake_features = real_features.squeeze().numpy(), fake_features.sq
 manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
 print(score[score_index])
+np.savetxt('./result/baseline_novel.txt', score)

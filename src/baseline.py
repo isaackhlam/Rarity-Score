@@ -33,6 +33,7 @@ data_test = datasets.CIFAR10(
 data_loader_train = torch.utils.data.DataLoader(dataset=data_train, batch_size=64)
 data_loader_test = torch.utils.data.DataLoader(dataset=data_test, batch_size=64)
 
+
 model = models.vgg16(pretrained=True).eval()
 
 flag = 1
@@ -66,3 +67,4 @@ real_features, fake_features = real_features.squeeze().numpy(), fake_features.sq
 manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
 print(score[score_index])
+np.savetxt('./result/baseline.txt', score)
