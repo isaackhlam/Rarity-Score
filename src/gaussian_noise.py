@@ -3,7 +3,6 @@ import torch
 sigma = 1
 
 def gaussian_noise_tensor(img, sigma=sigma):
-    print(sigma)
     assert isinstance(img, torch.Tensor)
     dtype = img.dtype
     if not img.is_floating_point():
