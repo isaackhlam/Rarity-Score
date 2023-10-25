@@ -61,7 +61,8 @@ if __name__ == '__main__':
     p = psutil.Process()
 
     for i in range(0,10):
-        real_partition = list(range(0,10)).remove(i)
+        real_partition = list(range(0,10))
+        del real_partition[i]
         data_train = CIFAR10Dataset(data, partition=real_partition)
         print(len(data_train)) # Sanity Check
         data_loader_train = torch.utils.data.DataLoader(dataset=data_train, batch_size=64)
