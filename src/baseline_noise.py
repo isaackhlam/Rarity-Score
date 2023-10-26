@@ -64,7 +64,7 @@ if __name__ == '__main__':
     real_features = get_real_manifold(data_loader_train)
     real_features = real_features.squeeze().numpy()
 
-    for i in [i * 0.01 for i in range(0, 2)]:
+    for i in [i * 0.05 for i in range(0, 100)]:
         print(f"Add Gaussian Noise of sigma {i}. Calculating...\n")
         transform = transforms.Compose([
             transforms.ToTensor(),
@@ -83,10 +83,10 @@ if __name__ == '__main__':
         fake_features = get_fake_images_feature(data_loader_test)
         fake_features = fake_features.squeeze().numpy()
 
-        # manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
-        # score, score_index = manifold.rarity(k=nearest_k)
-        # del manifold
-        # gc.collect()
-        # print(score[score_index])
-        # np.savetxt(f'./result/add_gaussian_noise/baseline_sigma_{i}.txt', score)
-        # print(f"Memory Info: {p.memory_info()}")
+        manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
+        score, score_index = manifold.rarity(k=nearest_k)
+        del manifold
+        gc.collect()
+        print(score[score_index])
+        np.savetxt(f'./result/add_gaussian_noise/baseline_sigma_{i}.txt', score)
+        print(f"Memory Info: {p.memory_info()}")
