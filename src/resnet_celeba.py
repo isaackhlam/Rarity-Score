@@ -49,6 +49,9 @@ def extract_features(model, data_loader):
 real_features = extract_features(resnet, real_loader)
 fake_features = extract_features(resnet, fake_loader)
 
+real_features = real_features.numpy()
+fake_features = fake_features.numpy()
+
 nearest_k = 3
 manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
