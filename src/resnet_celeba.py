@@ -33,8 +33,8 @@ fake_size = int(len(dataset) * fake_percentage)
 real_size = len(dataset) - fake_size
 real_dataset, fake_dataset = random_split(dataset, [real_size, fake_size])
 
-real_loader = DataLoader(real_dataset, batch_size=64)
-fake_loader = DataLoader(fake_dataset, batch_size=64)
+real_loader = DataLoader(real_dataset, batch_size=256)
+fake_loader = DataLoader(fake_dataset, batch_size=256)
 
 def extract_features(model, data_loader):
     features = []
