@@ -25,7 +25,11 @@ transform_inception = transforms.Compose([
 
 dataset = datasets.CelebA(root="./celeba_data", split="all", download=False, transform=transform_inception)
 
-inception = models.inception_v3(pretrained=True).to(device)
+# parallel processing with GPUs
+inception = models.inception_v3(pretrained=True)
+inception = torch.nn.DataParallel(inception)
+inception.to(device)
+
 
 # split into 'real' and 'fake' portions
 fake_percentage = 0.3

@@ -25,7 +25,10 @@ transform_resnet = transforms.Compose([
 # load dataset
 dataset = datasets.CelebA(root="./celeba_data", split="all", download=False, transform=transform_resnet)
 
-resnet = models.resnet50(pretrained=True).to(device)
+# parallel processing with GPUs
+resnet = models.resnet50(pretrained=True)
+resnet = torch.nn.DataParallel(resnet)
+resnet.to(device)
 
 # split dataset into 'real' and 'fake' portions
 fake_percentage = 0.3
