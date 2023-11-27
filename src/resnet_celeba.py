@@ -82,14 +82,21 @@ non_zero_scores = score[score != 0]
 sorted_scores = np.sort(non_zero_scores)
 
 # indcies for lowest and highest scores
-lowest_indices = score_index[-3:]
+lowest_indices = []
+for i in range(-1, -len(score_index), -1):
+    if score[score_index[i]] != 0:
+        lowest_indices.append(score_index[i])
+        if len(lowest_indices) == 3:
+            break
+
 highest_indices = score_index[:3]
+print(f'highest score: {score[score_index[0]],score[score_index[1]],score[score_index[2]]}')
 
 # idx for median score
 median_score = np.median(sorted_scores)
 median_index = np.where(score == median_score)[0][0]
 
-zero_indices = score[score == 0]
+# zero_indices = score[score == 0]
 
 def save_image(dataset, index, filename):
     directory = "./result/resnet_celeba"
@@ -100,12 +107,12 @@ def save_image(dataset, index, filename):
     image.save(os.path.join(directory, filename))
 
 for i, index in enumerate(lowest_indices):
-    save_image(dataset, index, f'lowest_{i+1}.png')
+    save_image(fake_dataset, index, f'lowest_{i+1}.png')
 
 for i, index in enumerate(highest_indices):
-    save_image(dataset, index, f'highest_{i+1}.png')
+    save_image(fake_dataset, index, f'highest_{i+1}.png')
 
-for i, index in enumerate(zero_indices[:3] if len(zero_indices)>=3 else zero_indices):
-    save_image(dataset, index, f'zero_{i+1}.png')
+# for i, index in enumerate(zero_indices[:3] if len(zero_indices)>=3 else zero_indices):
+#     save_image(fake_dataset, index, f'zero_{i+1}.png')
 
-save_image(dataset, median_index, 'median.png')
+save_image(fake_dataset, median_index, 'median.png')
