@@ -57,8 +57,9 @@ import gc
 del real_loader, fake_loader, real_dataset, dataset
 gc.collect()
 
-real_features = real_features.numpy()
-fake_features = fake_features.numpy()
+# real_features = real_features.numpy()
+# fake_features = fake_features.numpy()
+print("fake features shape:"+ fake_features.shape)
 
 nearest_k = 3
 manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
