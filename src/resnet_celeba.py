@@ -54,7 +54,7 @@ real_features = extract_features(resnet, real_loader)
 fake_features = extract_features(resnet, fake_loader)
 
 import gc
-del real_loader, fake_loader, real_dataset, fake_dataset
+del real_loader, fake_loader, real_dataset, dataset
 gc.collect()
 
 real_features = real_features.numpy()
