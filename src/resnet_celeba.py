@@ -5,6 +5,7 @@ from rarity_score import *
 from torchvision import datasets, transforms, models
 from tqdm import tqdm
 from torch.utils.data import DataLoader, random_split
+import os
 
 seed = 2302
 random.seed(seed)
@@ -91,9 +92,12 @@ median_index = np.where(score == median_score)[0][0]
 zero_indices = score[score == 0]
 
 def save_image(dataset, index, filename):
+    directory = "./result/resnet_celeba"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     image_tensor, _ = dataset[index]
     image = tensor_to_pil(image_tensor)
-    image.save(f'./result/resnet_celeba/{filename}')
+    image.save(os.path.join(directory, filename))
 
 for i, index in enumerate(lowest_indices):
     save_image(dataset, index, f'lowest_{i+1}.png')
