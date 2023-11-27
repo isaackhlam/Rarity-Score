@@ -71,30 +71,32 @@ import torchvision.transforms as T
 from torchvision.utils import make_grid
 import matplotlib.pyplot as plt
 
+#inverse transformation
 def tensor_to_pil(tensor):
-    # undo the normalization
-    unnormalize = T.Normalize(mean=[-0.485 / 0.229, -0.456 / 0.224, -0.406 / 0.225], std=[1/0.229, 1/0.224, 1/0.225])
+    unnormalize = transforms.Compose([
+        transforms.Normalize(mean=[0., 0., 0.], std=[1/0.229, 1/0.224, 1/0.225]),
+        transforms.Normalize(mean=[-0.485, -0.456, -0.406], std=[1., 1., 1.]),
+    ])
     tensor = unnormalize(tensor)
-    # convert to PIL Image
     return T.ToPILImage()(tensor)
 
-non_zero_scores = score[score != 0]
-sorted_scores = np.sort(non_zero_scores)
+# non_zero_scores = score[score != 0]
+# sorted_scores = np.sort(non_zero_scores)
 
 # indcies for lowest and highest scores
 lowest_indices = []
 for i in range(-1, -len(score_index), -1):
     if score[score_index[i]] != 0:
         lowest_indices.append(score_index[i])
-        if len(lowest_indices) == 3:
+        if len(lowest_indices) == 10:
             break
 
-highest_indices = score_index[:3]
+highest_indices = score_index[:10]
 print(f'highest score: {score[score_index[0]],score[score_index[1]],score[score_index[2]]}')
 
 # idx for median score
-median_score = np.median(sorted_scores)
-median_index = np.where(score == median_score)[0][0]
+# median_score = np.median(sorted_scores)
+median_index = np.argsort(score)[len(score) // 2]
 
 # zero_indices = score[score == 0]
 
