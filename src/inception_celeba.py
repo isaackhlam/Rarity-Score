@@ -23,7 +23,7 @@ transform_inception = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-dataset = datasets.CelebA(root="./celeba_data", split="all", download=False, transform=transform_inception)
+dataset = datasets.CelebA(root="./celeba_data", split="train", download=False, transform=transform_inception)
 
 # parallel processing with GPUs
 inception = models.inception_v3(pretrained=True)
@@ -61,7 +61,7 @@ real_features = real_features.numpy()
 fake_features = fake_features.numpy()
 
 nearest_k = 3
-manifold = MANIFOLD(real_features=real_features, fake_features=fake_features, device=device)
+manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
 print(score[score_index])
 

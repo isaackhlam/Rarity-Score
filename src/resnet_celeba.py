@@ -23,7 +23,7 @@ transform_resnet = transforms.Compose([
 
 
 # load dataset
-dataset = datasets.CelebA(root="./celeba_data", split="all", download=False, transform=transform_resnet)
+dataset = datasets.CelebA(root="./celeba_data", split="train", download=False, transform=transform_resnet)
 
 # parallel processing with GPUs
 resnet = models.resnet50(pretrained=True)
@@ -60,7 +60,7 @@ real_features = real_features.numpy()
 fake_features = fake_features.numpy()
 
 nearest_k = 3
-manifold = MANIFOLD(real_features=real_features, fake_features=fake_features, device=device)
+manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
 print(score[score_index])
 
