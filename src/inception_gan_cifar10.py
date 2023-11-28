@@ -33,7 +33,9 @@ class ImageDataset(Dataset):
 
 
 transform = transforms.Compose([
-    transforms.ToTensor(), transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    transforms.Resize((299, 299)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
 data_train = datasets.CIFAR10(
@@ -48,7 +50,7 @@ data_test = ImageDataset("./cifar10-stylegan2-imgs/", transform)
 data_loader_train = DataLoader(dataset=data_train, batch_size=64)
 data_loader_test = DataLoader(dataset=data_test, batch_size=64)
 
-model = models.vgg16(pretrained=True).eval()
+model = models.inception_v3(pretrained=True).eval()
 
 flag = 1
 with torch.no_grad():
@@ -81,7 +83,7 @@ real_features, fake_features = real_features.squeeze().numpy(), fake_features.sq
 manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
 print(score[score_index])
-np.savetxt('./result/vgg_stylegan2.txt', score)
+np.savetxt('./result/inception_stylegan2.txt', score)
 
 
 #biggan
@@ -124,4 +126,4 @@ real_features, fake_features = real_features.squeeze().numpy(), fake_features.sq
 manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
 print(score[score_index])
-np.savetxt('./result/vgg_biggan_deep.txt', score)
+np.savetxt('./result/inception_biggan_deep.txt', score)
