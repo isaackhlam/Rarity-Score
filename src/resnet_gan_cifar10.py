@@ -52,34 +52,21 @@ data_loader_test = DataLoader(dataset=data_test, batch_size=64)
 
 model = models.resnet50(pretrained=True).eval()
 
-flag = 1
-with torch.no_grad():
-    for data in tqdm(data_loader_train):
-        x, _ = data
-        features = model.features(x)
-        if flag:
-            real_features = features
-            flag = 0
-        else:
-            real_features = torch.cat((real_features, features), 0)
-            del features
+def extract_features(model, data_loader):
+    features = []
+    with torch.no_grad():
+        for images, _ in tqdm(data_loader):
+            images = images
+            output = model(images)
+            features.append(output)
+    return np.concatenate(features, axis=0)
 
 
-flag = 1
-with torch.no_grad():
-    for data in tqdm(data_loader_test):
-        x = data
-        features = model.features(x)
-        if flag:
-            fake_features = features
-            flag = 0
-        else:
-            fake_features = torch.cat((fake_features, features), 0)
-            del features
+real_features = extract_features(model, data_loader_train)
+fake_features = extract_features(model, data_loader_test)
 
 nearest_k = 3
 
-real_features, fake_features = real_features.squeeze().numpy(), fake_features.squeeze().numpy()
 manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
 print(score[score_index])
@@ -95,34 +82,10 @@ data_loader_test = DataLoader(dataset=data_test, batch_size=64)
 
 # model = models.vgg16(pretrained=True).eval()
 
-# flag = 1
-# with torch.no_grad():
-#     for data in tqdm(data_loader_train):
-#         x, _ = data
-#         features = model.features(x)
-#         if flag:
-#             real_features = features
-#             flag = 0
-#         else:
-#             real_features = torch.cat((real_features, features), 0)
-#             del features
-
-
-flag = 1
-with torch.no_grad():
-    for data in tqdm(data_loader_test):
-        x = data
-        features = model.features(x)
-        if flag:
-            fake_features = features
-            flag = 0
-        else:
-            fake_features = torch.cat((fake_features, features), 0)
-            del features
+fake_features = extract_features(model, data_loader_test)
 
 nearest_k = 3
 
-real_features, fake_features = real_features.squeeze().numpy(), fake_features.squeeze().numpy()
 manifold = MANIFOLD(real_features=real_features, fake_features=fake_features)
 score, score_index = manifold.rarity(k=nearest_k)
 print(score[score_index])

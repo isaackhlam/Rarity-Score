@@ -41,6 +41,7 @@ real_loader = DataLoader(real_dataset, batch_size=256)
 fake_loader = DataLoader(fake_dataset, batch_size=256)
 
 def extract_features(model, data_loader):
+    model.eval()
     features = []
     with torch.no_grad():
         for images, _ in tqdm(data_loader):
