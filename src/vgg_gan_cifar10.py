@@ -16,7 +16,7 @@ torch.cuda.manual_seed_all(seed)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-class ImageDataset(datasets):
+class ImageDataset(Dataset):
     def __item__(self, path, transform):
         self.path = path
         self.transform = transform
