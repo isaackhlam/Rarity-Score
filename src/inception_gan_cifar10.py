@@ -29,7 +29,8 @@ class ImageDataset(Dataset):
         img_path = os.path.join(self.path, self.img_names[idx])
         image = Image.open(img_path).convert("RGB")
         image = self.transform(image)
-        return image
+        _ = []
+        return image, _
 
 
 transform = transforms.Compose([

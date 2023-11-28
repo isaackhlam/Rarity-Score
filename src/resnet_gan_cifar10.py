@@ -29,11 +29,11 @@ class ImageDataset(Dataset):
         img_path = os.path.join(self.path, self.img_names[idx])
         image = Image.open(img_path).convert("RGB")
         image = self.transform(image)
-        return image
+        _ = []
+        return image, _
 
 
 transform = transforms.Compose([
-    transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
@@ -50,7 +50,7 @@ data_test = ImageDataset("./cifar10-stylegan2-imgs/", transform)
 data_loader_train = DataLoader(dataset=data_train, batch_size=64)
 data_loader_test = DataLoader(dataset=data_test, batch_size=64)
 
-model = models.resnet50(pretrained=True).eval()
+model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2).eval()
 
 def extract_features(model, data_loader):
     features = []
